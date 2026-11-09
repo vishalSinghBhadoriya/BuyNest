@@ -15,7 +15,7 @@ const setMeta = (key, content, attribute = 'name') => {
 
 export const usePageMeta = ({ title, description } = {}) => {
     useEffect(() => {
-        const pageTitle = title ? `${title} · devamir` : brand.seo.defaultTitle;
+        const pageTitle = title ? `${title} · BuyNest` : brand.seo.defaultTitle;
         const pageDescription = description ?? brand.seo.defaultDescription;
         const siteUrl = (
             brand.seo.siteUrl ||

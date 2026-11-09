@@ -49,7 +49,7 @@ const ProductCard = ({ product }) => {
 
     return (
         <div className="surface-card rounded-xl overflow-hidden flex flex-col h-full group">
-            <div className="relative aspect-square bg-subtle flex items-center justify-center p-6">
+            <div className="relative aspect-square bg-subtle flex items-center justify-center p-6 h-[300px]">
                 <Link to={`/product/${product.id}`} className="w-full h-full flex items-center justify-center">
                     <ProductImage
                         src={product.image}

@@ -1,19 +1,17 @@
 export const brand = {
-    name: 'devamir',
+    name: 'BuyNest',
     tagline: 'Curated goods for modern living',
     description:
         'A minimal storefront experience built to showcase product discovery, cart flow, and responsive design.',
     author: {
-        name: 'Amir Fallahi',
+        name: 'Vishal Bhadoriya',
         role: 'Frontend Developer',
-        phone: '+98 920 500 7494',
-        phoneHref: 'tel:+989205007494',
-        email: 'devamir99@gmail.com',
-        emailHref: 'mailto:devamir99@gmail.com',
-        linkedin: 'https://www.linkedin.com/in/devamir',
-        github: 'https://github.com/devamir99',
-        telegram: 'https://t.me/devamir9',
-        instagram: 'https://www.instagram.com/devamirr',
+        phone: '+91 9765906240',
+        phoneHref: 'tel:+919765906240',
+        email: 'vishalbhadoriya9765@gmail.com',
+        emailHref: 'mailto:vishalbhadoriya9765@gmail.com',
+        linkedin: 'www.linkedin.com/in/vishal-singh-bhadoriya',
+        github: 'http://github.com/vishalSinghBhadoriya/',
     },
     demo: {
         label: 'Storefront demo',
@@ -27,17 +25,17 @@ export const brand = {
         subline: 'Reach out to discuss a tailored version for your business.',
         primary: {
             label: 'Call now',
-            href: 'tel:+989205007494',
+            href: 'tel:+919765906240',
         },
         secondary: {
             label: 'LinkedIn',
-            href: 'https://www.linkedin.com/in/devamir',
+            href: 'www.linkedin.com/in/vishal-singh-bhadoriya',
         },
     },
     about: {
         title: 'Thoughtfully made, quietly confident',
         intro:
-            'devamir began as a simple idea: everyday objects deserve the same care as statement pieces. We select items for clarity of form, honest materials, and lasting use.',
+            'BuyNest began as a simple idea: everyday objects deserve the same care as statement pieces. We select items for clarity of form, honest materials, and lasting use.',
         story: [
             'The collection spans apparel, accessories, and electronics — grouped not by trend cycles, but by how they fit into a considered routine. Each product page is designed to give you room to look closely before you decide.',
             'This site runs as a live storefront demonstration — browsing, saving favourites, and checkout flow included — built to show what a tailored shop can feel like in practice.',
@@ -76,9 +74,9 @@ export const brand = {
         },
     ],
     seo: {
-        defaultTitle: 'devamir — Storefront Demo',
+        defaultTitle: 'BuyNest',
         defaultDescription:
-            'A minimal e-commerce storefront demo by Amir Fallahi. Browse products, favourites, cart, and checkout in a cream-and-coffee experience.',
+            'A minimal e-commerce storefront demo by Vishal bhadoriay. Browse products, favourites, cart, and checkout in a cream-and-coffee experience.',
         siteUrl: import.meta.env.VITE_SITE_URL ?? '',
     },
 };
