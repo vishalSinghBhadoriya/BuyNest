@@ -10,27 +10,6 @@ BuyNest provides a complete frontend shopping experience, including product disc
 
 ---
 
-## Screenshots
-
-### Home Page
-
-Add your project screenshots here.
-
-<!-- Add screenshots in docs/screenshots/ -->
-
-### Product Details
-
-<!-- Add product detail screenshots here. -->
-
-### Shopping Cart and Checkout
-
-<!-- Add cart and checkout screenshots here. -->
-
-### Orders and Favourites
-
-<!-- Add orders and favourites screenshots here. -->
-
----
 
 ## Features
 
