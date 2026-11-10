@@ -1,5 +1,7 @@
-import { useContext, useState } from 'react';
+
+import { useContext, useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+
 import { FavoritesContext } from '../context/FavoritesContext';
 import { useCart } from '../context/CartContext';
 import { useTheme } from '../context/ThemeContext';
@@ -9,143 +11,259 @@ const Navbar = () => {
     const { favorites } = useContext(FavoritesContext);
     const { getCartItemsCount } = useCart();
     const { isDark, toggleTheme } = useTheme();
+
     const [menuOpen, setMenuOpen] = useState(false);
     const location = useLocation();
 
+    const cartCount = getCartItemsCount();
+    const favoriteCount = favorites.length;
+
+    useEffect(() => {
+        setMenuOpen(false);
+    }, [location.pathname]);
+
+    useEffect(() => {
+        if (!menuOpen) return;
+
+        const handleEscape = (event) => {
+            if (event.key === 'Escape') {
+                setMenuOpen(false);
+            }
+        };
+
+        document.addEventListener('keydown', handleEscape);
+
+        return () => {
+            document.removeEventListener('keydown', handleEscape);
+        };
+    }, [menuOpen]);
+
     const navLinks = [
-        { to: '/', label: 'Shop' },
+        { to: '/', label: 'Shop', match: () => location.pathname === '/' || location.pathname.startsWith('/product/') },
         { to: '/about', label: 'About' },
-        { to: '/favorites', label: 'Favorites', badge: favorites.length },
-        { to: '/cart', label: 'Cart', badge: getCartItemsCount() },
+        { to: '/favorites', label: 'Favorites', badge: favoriteCount },
+        { to: '/orders', label: 'Orders', match: () => location.pathname.startsWith('/orders') },
     ];
 
-    const isActive = (path) => location.pathname === path;
+    const isActive = (link) =>
+        link.match ? link.match() : location.pathname === link.to;
+
+    const IconButton = ({ label, onClick, children }) => (
+        <button
+            type="button"
+            onClick={onClick}
+            aria-label={label}
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--border)] text-[var(--text-primary)] transition hover:bg-[var(--surface-muted)]"
+        >
+            {children}
+        </button>
+    );
 
     return (
-        <header className="sticky top-0 z-50 bg-page/95 backdrop-blur-md border-b border-[var(--border)]">
-            <nav className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+        <header className="sticky top-0 z-50 border-b border-[var(--border)] bg-[var(--bg-page)]/95 backdrop-blur-xl">
+            <nav
+                className="container mx-auto flex h-[76px] items-center justify-between px-4 sm:px-6 lg:px-8"
+                aria-label="Main navigation"
+            >
+                {/* Logo */}
                 <Link
                     to="/"
-                    className="font-serif text-2xl text-accent tracking-tight"
-                    onClick={() => setMenuOpen(false)}
+                    className="group flex items-center gap-2"
+                    aria-label="BuyNest home"
                 >
-                    {brand.name}
+                    <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-[var(--accent)] text-lg font-bold text-[var(--on-accent)] transition-transform group-hover:rotate-6">
+                        B
+                    </span>
+
+                    <span className="text-xl font-bold tracking-tight text-[var(--text-primary)]">
+                        BuyNest<span className="text-muted">.</span>
+                    </span>
                 </Link>
 
-                <div className="hidden md:flex items-center gap-8">
-                    {navLinks.map(({ to, label, badge }) => (
+                {/* Desktop Navigation */}
+                <div className="hidden items-center gap-9 md:flex">
+                    {navLinks.map((link) => (
                         <Link
-                            key={to}
-                            to={to}
-                            className={`relative text-sm font-medium transition-colors ${
-                                isActive(to) ? 'text-accent' : 'text-secondary hover:text-accent'
+                            key={link.to}
+                            to={link.to}
+                            aria-current={isActive(link) ? 'page' : undefined}
+                            className={`relative py-2 text-sm font-medium transition-colors ${
+                                isActive(link)
+                                    ? 'text-[var(--text-primary)]'
+                                    : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
                             }`}
                         >
-                            {label}
-                            {badge > 0 && (
-                                <span
-                                    className="absolute -top-2 -right-4 text-[10px] w-4 h-4 flex items-center justify-center rounded-full"
-                                    style={{
-                                        backgroundColor: 'var(--accent)',
-                                        color: 'var(--on-accent)',
-                                    }}
-                                >
-                                    {badge}
-                                </span>
+                            {link.label}
+
+                            {isActive(link) && (
+                                <span className="absolute -bottom-1 left-0 h-0.5 w-full rounded-full bg-[var(--accent)]" />
                             )}
                         </Link>
                     ))}
-
-                    <a href={brand.cta.primary.href} className="btn-primary text-sm py-2 px-4">
-                        {brand.cta.primary.label}
-                    </a>
-
-                    <button
-                        type="button"
-                        onClick={toggleTheme}
-                        className="p-2 rounded-lg border border-[var(--border)] bg-[var(--surface)] hover:bg-[var(--surface-muted)] transition-colors text-accent"
-                        aria-label="Toggle theme"
-                    >
-                        {isDark ? (
-                            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                <path fillRule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clipRule="evenodd" />
-                            </svg>
-                        ) : (
-                            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
-                            </svg>
-                        )}
-                    </button>
                 </div>
 
-                <div className="flex md:hidden items-center gap-3">
-                    <button
-                        type="button"
+                {/* Right Actions */}
+                <div className="flex items-center gap-2 sm:gap-3">
+                    {/* Favorites */}
+                    <Link
+                        to="/favorites"
+                        aria-label={`Favorites, ${favoriteCount} items`}
+                        className="relative flex h-10 w-10 items-center justify-center rounded-full border border-[var(--border)] text-[var(--text-primary)] transition hover:bg-[var(--surface-muted)]"
+                    >
+                        <svg className="h-[18px] w-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path
+                                strokeWidth="1.7"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M20.8 4.6a5.5 5.5 0 00-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 00-7.8 7.8l1.1 1.1L12 21l7.8-7.5 1.1-1.1a5.5 5.5 0 00-.1-7.8z"
+                            />
+                        </svg>
+
+                        {favoriteCount > 0 && (
+                            <span className="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-[var(--accent)] px-1 text-[9px] font-bold text-[var(--on-accent)]">
+                                {favoriteCount}
+                            </span>
+                        )}
+                    </Link>
+
+                    {/* Cart */}
+                    <Link
+                        to="/cart"
+                        aria-label={`Shopping cart, ${cartCount} items`}
+                        className="relative flex h-10 w-10 items-center justify-center rounded-full border border-[var(--border)] text-[var(--text-primary)] transition hover:bg-[var(--surface-muted)]"
+                    >
+                        <svg className="h-[19px] w-[19px]" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path
+                                strokeWidth="1.7"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M3 3h2l2.4 12.2a2 2 0 002 1.6h8.8a2 2 0 002-1.6L22 8H6"
+                            />
+                            <circle cx="10" cy="21" r="1" fill="currentColor" />
+                            <circle cx="18" cy="21" r="1" fill="currentColor" />
+                        </svg>
+
+                        {cartCount > 0 && (
+                            <span className="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-[var(--accent)] px-1 text-[9px] font-bold text-[var(--on-accent)]">
+                                {cartCount}
+                            </span>
+                        )}
+                    </Link>
+
+                    {/* Theme Toggle */}
+                    <IconButton
+                        label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
                         onClick={toggleTheme}
-                        className="p-2 rounded-lg border border-[var(--border)] bg-[var(--surface)] text-accent"
-                        aria-label="Toggle theme"
                     >
                         {isDark ? (
-                            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                <path fillRule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd" />
+                            <svg className="h-[18px] w-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <circle cx="12" cy="12" r="4" strokeWidth="1.7" />
+                                <path
+                                    strokeWidth="1.7"
+                                    strokeLinecap="round"
+                                    d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3l1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3l1.42-1.42"
+                                />
                             </svg>
                         ) : (
-                            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
+                            <svg className="h-[18px] w-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path
+                                    strokeWidth="1.7"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    d="M20.9 13A9 9 0 0111 3.1 9 9 0 1020.9 13z"
+                                />
                             </svg>
                         )}
-                    </button>
+                    </IconButton>
+
+                    {/* Mobile Menu Toggle */}
                     <button
                         type="button"
-                        onClick={() => setMenuOpen(!menuOpen)}
-                        className="p-2 rounded-lg border border-[var(--border)] bg-[var(--surface)] text-[var(--text-primary)]"
-                        aria-label="Toggle menu"
+                        onClick={() => setMenuOpen((prev) => !prev)}
+                        aria-label={menuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+                        aria-expanded={menuOpen}
+                        aria-controls="mobile-navigation"
+                        className="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--border)] text-[var(--text-primary)] transition hover:bg-[var(--surface-muted)] md:hidden"
                     >
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            {menuOpen ? (
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                            ) : (
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                            )}
-                        </svg>
+                        {menuOpen ? (
+                            <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path strokeWidth="2" strokeLinecap="round" d="M6 6l12 12M18 6L6 18" />
+                            </svg>
+                        ) : (
+                            <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path strokeWidth="2" strokeLinecap="round" d="M4 7h16M4 12h16M4 17h16" />
+                            </svg>
+                        )}
                     </button>
                 </div>
             </nav>
 
+            {/* Mobile Navigation */}
             {menuOpen && (
-                <div className="md:hidden border-t border-[var(--border)] bg-[var(--surface)] px-4 py-4 space-y-3">
-                    {navLinks.map(({ to, label, badge }) => (
+                <div
+                    id="mobile-navigation"
+                    className="border-t border-[var(--border)] bg-[var(--surface)] px-5 py-5 shadow-lg md:hidden"
+                >
+                    <div className="mb-4 flex items-center justify-between">
+                        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted">
+                            Navigation
+                        </p>
+
+                        <span className="text-xs text-muted">
+                            {brand.tagline}
+                        </span>
+                    </div>
+
+                    <div className="space-y-1">
+                        {navLinks.map((link) => (
+                            <Link
+                                key={link.to}
+                                to={link.to}
+                                onClick={() => setMenuOpen(false)}
+                                aria-current={isActive(link) ? 'page' : undefined}
+                                className={`flex items-center justify-between rounded-xl px-4 py-3 text-sm font-medium transition ${
+                                    isActive(link)
+                                        ? 'bg-[var(--surface-muted)] text-[var(--text-primary)]'
+                                        : 'text-[var(--text-secondary)] hover:bg-[var(--surface-muted)]'
+                                }`}
+                            >
+                                {link.label}
+
+                                {link.badge > 0 && (
+                                    <span className="rounded-full bg-[var(--accent)] px-2 py-0.5 text-xs text-[var(--on-accent)]">
+                                        {link.badge}
+                                    </span>
+                                )}
+                            </Link>
+                        ))}
+
                         <Link
-                            key={to}
-                            to={to}
+                            to="/cart"
                             onClick={() => setMenuOpen(false)}
-                            className="flex items-center justify-between py-2 text-sm font-medium text-[var(--text-primary)]"
+                            className="flex items-center justify-between rounded-xl px-4 py-3 text-sm font-medium text-[var(--text-secondary)] transition hover:bg-[var(--surface-muted)]"
                         >
-                            {label}
-                            {badge > 0 && (
-                                <span
-                                    className="text-xs px-2 py-0.5 rounded-full"
-                                    style={{
-                                        backgroundColor: 'var(--accent)',
-                                        color: 'var(--on-accent)',
-                                    }}
-                                >
-                                    {badge}
+                            Shopping Cart
+
+                            {cartCount > 0 && (
+                                <span className="rounded-full bg-[var(--accent)] px-2 py-0.5 text-xs text-[var(--on-accent)]">
+                                    {cartCount}
                                 </span>
                             )}
                         </Link>
-                    ))}
-                    <a href={brand.cta.primary.href} className="btn-primary w-full mt-2">
-                        {brand.cta.primary.label}
-                    </a>
-                    <a
-                        href={brand.cta.secondary.href}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="btn-outline w-full"
-                    >
-                        {brand.cta.secondary.label}
-                    </a>
+                    </div>
+
+                    <div className="mt-5 border-t border-[var(--border)] pt-5">
+                        <p className="mb-3 text-xs text-muted">
+                            {brand.cta.headline}
+                        </p>
+
+                        <a
+                            href={brand.cta.primary.href}
+                            className="flex w-full items-center justify-center rounded-full bg-[var(--accent)] px-5 py-3 text-sm font-semibold text-[var(--on-accent)] transition hover:opacity-80"
+                        >
+                            {brand.cta.primary.label}
+                        </a>
+                    </div>
                 </div>
             )}
         </header>

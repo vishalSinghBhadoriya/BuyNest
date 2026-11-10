@@ -2,7 +2,7 @@
 
 A minimal, responsive e-commerce storefront built with React and Vite. Designed as a live portfolio demo by **Amir Fallahi** — browse products, save favourites, manage a cart, and walk through a three-step checkout flow.
 
-**Live demo:** [devamir99.github.io/fakestore-app](https://devamir99.github.io/fakestore-app)
+**Live demo:** [devamir99.github.io/productService-app](https://devamir99.github.io/productService-app)
 
 ## Screenshots
 
@@ -62,8 +62,8 @@ A minimal, responsive e-commerce storefront built with React and Vite. Designed 
 ## Getting started
 
 ```bash
-git clone https://github.com/devamir99/fakestore-app.git
-cd fakestore-app
+git clone https://github.com/devamir99/productService-app.git
+cd productService-app
 npm install
 npm run dev
 ```
@@ -94,9 +94,9 @@ This project is configured for GitHub Pages via GitHub Actions (`.github/workflo
 1. Push to the `main` branch (or run the workflow manually)
 2. In the repo: **Settings → Pages → Source → GitHub Actions**
 3. After the workflow succeeds, open:  
-   [https://devamir99.github.io/fakestore-app](https://devamir99.github.io/fakestore-app)
+   [https://devamir99.github.io/productService-app](https://devamir99.github.io/productService-app)
 
-Vite `base` is set to `/fakestore-app/` for project-site hosting. The build also copies `index.html` → `404.html` so SPA routes work on refresh.
+Vite `base` is set to `/productService-app/` for project-site hosting. The build also copies `index.html` → `404.html` so SPA routes work on refresh.
 
 ## Custom builds
 

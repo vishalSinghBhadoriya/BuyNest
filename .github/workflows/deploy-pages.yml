@@ -1,8 +1,10 @@
-name: Deploy to GitHub Pages
+
+name: Deploy BuyNest to GitHub Pages
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
   workflow_dispatch:
 
 permissions:
@@ -14,13 +16,14 @@ concurrency:
   group: pages
   cancel-in-progress: true
 
-# Single job avoids stale cross-job artifacts after Re-run all jobs.
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -31,22 +34,16 @@ jobs:
           node-version: 22
           cache: npm
 
+      - name: Setup GitHub Pages
+        uses: actions/configure-pages@v5
+
       - name: Install dependencies
         run: npm ci
 
-      - name: Build
+      - name: Build BuyNest
         run: npm run build
         env:
-          VITE_SITE_URL: https://devamir99.github.io/fakestore-app
-
-      - name: SPA fallback for GitHub Pages
-        run: cp dist/index.html dist/404.html
-
-      - name: Remove stale github-pages artifacts
-        uses: geekyeggo/delete-artifact@v5
-        with:
-          name: github-pages
-          failOnError: false
+          VITE_SITE_URL: https://vishalsinghbhadoriya.github.io/BuyNest/
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3

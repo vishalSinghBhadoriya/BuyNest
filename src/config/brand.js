@@ -1,8 +1,12 @@
+
 export const brand = {
     name: 'BuyNest',
-    tagline: 'Curated goods for modern living',
+
+    tagline: 'Find your everyday favorites.',
+
     description:
-        'A minimal storefront experience built to showcase product discovery, cart flow, and responsive design.',
+        'Discover thoughtfully selected products across fashion, electronics, and lifestyle.',
+
     author: {
         name: 'Vishal Bhadoriya',
         role: 'Frontend Developer',
@@ -10,73 +14,81 @@ export const brand = {
         phoneHref: 'tel:+919765906240',
         email: 'vishalbhadoriya9765@gmail.com',
         emailHref: 'mailto:vishalbhadoriya9765@gmail.com',
-        linkedin: 'www.linkedin.com/in/vishal-singh-bhadoriya',
-        github: 'http://github.com/vishalSinghBhadoriya/',
+        linkedin: 'https://www.linkedin.com/in/vishal-singh-bhadoriya',
+        github: 'https://github.com/vishalSinghBhadoriya/',
     },
+
     demo: {
-        label: 'Storefront demo',
-        message: 'Custom e-commerce builds available for your brand.',
-        checkoutTitle: 'Demo checkout',
+        label: 'BuyNest Storefront',
+        message: 'Explore the BuyNest shopping experience.',
+        checkoutTitle: 'Your demo order is confirmed!',
         checkoutMessage:
-            'This is a front-end demonstration. No orders are processed or stored. For a production-ready storefront built around your brand, reach out directly.',
+            'Your demo order has been successfully created. This is a frontend demonstration only. No payment was processed and no real order was placed.',
     },
+
     cta: {
-        headline: 'Need a storefront like this?',
-        subline: 'Reach out to discuss a tailored version for your business.',
+        headline: 'Have a project in mind?',
+        subline:
+            'Looking for a modern, responsive storefront? Let’s connect.',
         primary: {
-            label: 'Call now',
+            label: 'Contact me',
             href: 'tel:+919765906240',
         },
         secondary: {
-            label: 'LinkedIn',
-            href: 'www.linkedin.com/in/vishal-singh-bhadoriya',
+            label: 'Connect on LinkedIn',
+            href: 'https://www.linkedin.com/in/vishal-singh-bhadoriya',
         },
     },
+
     about: {
-        title: 'Thoughtfully made, quietly confident',
+        title: 'Shopping made simple.',
         intro:
-            'BuyNest began as a simple idea: everyday objects deserve the same care as statement pieces. We select items for clarity of form, honest materials, and lasting use.',
+            'BuyNest brings together everyday essentials, fashion, electronics, and lifestyle products in one convenient shopping experience.',
+
         story: [
-            'The collection spans apparel, accessories, and electronics — grouped not by trend cycles, but by how they fit into a considered routine. Each product page is designed to give you room to look closely before you decide.',
-            'This site runs as a live storefront demonstration — browsing, saving favourites, and checkout flow included — built to show what a tailored shop can feel like in practice.',
+            'Discover products across different categories through a clean and easy-to-use storefront. Browse collections, explore product details, and save your favorite items.',
+            'BuyNest is a frontend e-commerce demonstration featuring product discovery, wishlist management, cart functionality, order review, and demo checkout.',
         ],
+
         values: [
             {
-                title: 'Curated, not crowded',
-                text: 'A focused catalogue where every item earns its place.',
+                title: 'Easy discovery',
+                text: 'Explore products across multiple categories in one place.',
             },
             {
-                title: 'Clarity over noise',
-                text: 'Clean layouts, readable type, and space to breathe.',
+                title: 'Simple experience',
+                text: 'Clean layouts and intuitive navigation make shopping easier.',
             },
             {
-                title: 'Built to adapt',
-                text: 'The same foundation can be shaped around your brand, catalogue, and customers.',
+                title: 'Built for everyone',
+                text: 'Responsive design for mobile, tablet, and desktop screens.',
             },
         ],
     },
+
     trust: [
         {
-            title: 'Complimentary shipping',
-            text: 'Free delivery on every order within this demo experience.',
+            title: 'Easy product discovery',
+            text: 'Browse fashion, electronics, and lifestyle collections.',
         },
         {
-            title: 'Secure checkout flow',
-            text: 'A complete three-step checkout built for real-world integration.',
+            title: 'Wishlist and cart',
+            text: 'Save favorite products and manage your shopping cart.',
         },
         {
-            title: 'Works everywhere',
-            text: 'Fully responsive from phone to desktop, with dark and light modes.',
+            title: 'Responsive experience',
+            text: 'Enjoy a consistent experience across different devices.',
         },
         {
-            title: 'Direct support',
-            text: 'Questions about a custom build? Call or message anytime.',
+            title: 'Demo checkout',
+            text: 'Explore a multi-step checkout and order confirmation flow.',
         },
     ],
+
     seo: {
-        defaultTitle: 'BuyNest',
+        defaultTitle: 'BuyNest | Discover Something Better',
         defaultDescription:
-            'A minimal e-commerce storefront demo by Vishal bhadoriay. Browse products, favourites, cart, and checkout in a cream-and-coffee experience.',
+            'Explore fashion, electronics, accessories and everyday essentials at BuyNest.',
         siteUrl: import.meta.env.VITE_SITE_URL ?? '',
     },
 };
@@ -88,6 +100,6 @@ export const categoryLabels = {
     jewelery: 'Jewelry',
 };
 
-export const formatCategory = (category) =>
+export const formatCategory = (category = '') =>
     categoryLabels[category] ??
     category.charAt(0).toUpperCase() + category.slice(1);

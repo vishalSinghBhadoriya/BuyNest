@@ -31,7 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
-- Live FakeStore API dependency
+- Live productService API dependency
 - Outdated glassmorphism and gradient styling
 
 ## [0.1.0] - Initial
@@ -39,5 +39,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Basic React + Vite scaffold
-- Product listing from FakeStore API
+- Product listing from productService API
 - Simple cart and favorites

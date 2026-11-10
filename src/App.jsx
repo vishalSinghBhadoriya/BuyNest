@@ -12,7 +12,7 @@ import { ToastProvider } from './components/Toast';
 import { FavoritesProvider } from './context/FavoritesContext';
 import { CartProvider } from './context/CartContext';
 import { ThemeProvider } from './context/ThemeContext';
-
+import { OrdersProvider } from './context/OrdersContext';
 const Home = lazy(() => import('./pages/Home'));
 const ProductDetail = lazy(() => import('./pages/ProductDetail'));
 const Favorites = lazy(() => import('./pages/Favorites'));
@@ -20,11 +20,13 @@ const Cart = lazy(() => import('./pages/Cart'));
 const Checkout = lazy(() => import('./pages/Checkout'));
 const About = lazy(() => import('./pages/About'));
 const NotFound = lazy(() => import('./pages/NotFound'));
+const Orders = lazy(() => import('./pages/Orders'));
 
 function App() {
     return (
         <ThemeProvider>
             <CartProvider>
+                <OrdersProvider>
                 <FavoritesProvider>
                     <ToastProvider>
                         <ErrorBoundary>
@@ -47,6 +49,7 @@ function App() {
                                                 <Route path="/about" element={<About />} />
                                                 <Route path="/" element={<Home />} />
                                                 <Route path="*" element={<NotFound />} />
+                                                <Route path="/orders" element={<Orders />} />
                                             </Routes>
                                         </Suspense>
                                     </main>
@@ -57,6 +60,7 @@ function App() {
                         </ErrorBoundary>
                     </ToastProvider>
                 </FavoritesProvider>
+                </OrdersProvider>
             </CartProvider>
         </ThemeProvider>
     );

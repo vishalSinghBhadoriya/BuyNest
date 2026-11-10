@@ -1,6 +1,6 @@
-# Contributing to FakeStore App
+# Contributing to productService App
 
-Thank you for your interest in contributing to FakeStore! This document provides guidelines and information for contributors.
+Thank you for your interest in contributing to productService! This document provides guidelines and information for contributors.
 
 ## Getting Started
 
@@ -15,8 +15,8 @@ Thank you for your interest in contributing to FakeStore! This document provides
 1. Fork the repository
 2. Clone your fork:
    ```bash
-   git clone https://github.com/your-username/fakestore-app.git
-   cd fakestore-app
+   git clone https://github.com/your-username/productService-app.git
+   cd productService-app
    ```
 
 3. Install dependencies:

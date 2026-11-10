@@ -1,78 +1,200 @@
 import { useEffect, useState, useContext } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { getProductById, getRelatedProducts } from '../api/fakeStore';
+
+import {
+    getProductById,
+    getRelatedProducts,
+} from '../api/productService';
+
 import { FavoritesContext } from '../context/FavoritesContext';
 import { useCart } from '../context/CartContext';
+
 import { formatCategory } from '../config/brand';
+
 import Loader from '../components/Loader';
 import Breadcrumb from '../components/Breadcrumb';
 import ContactCTA from '../components/ContactCTA';
 import ProductCard from '../components/ProductCard';
 import ProductImage from '../components/ProductImage';
+
 import { useToast } from '../components/Toast';
 import { usePageMeta } from '../hooks/usePageMeta';
 
+const MAX_QUANTITY = 10;
+
+const formatPrice = (price) =>
+    new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+    }).format(Number(price) || 0);
+
 const ProductDetail = () => {
     const { id } = useParams();
+
     const [product, setProduct] = useState(null);
     const [related, setRelated] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(false);
     const [quantity, setQuantity] = useState(1);
 
-    const { favorites, addFavorite, removeFavorite } = useContext(FavoritesContext);
+    const { favorites, addFavorite, removeFavorite } =
+        useContext(FavoritesContext);
+
     const { addToCart } = useCart();
     const { addToast } = useToast();
-    const isFavorite = favorites.some((p) => p.id === Number(id));
+
+    const isFavorite = favorites.some(
+        (item) => item.id === product?.id
+    );
+
+    const rating = Number(product?.rating?.rate) || 0;
+    const reviewCount = Number(product?.rating?.count) || 0;
+    const price = Number(product?.price) || 0;
+    const subtotal = price * quantity;
 
     usePageMeta({
-        title: product?.title,
+        title: product?.title || 'Product Details',
         description: product?.description?.slice(0, 155),
     });
 
+    // Fetch product whenever the URL ID changes.
     useEffect(() => {
+        let isMounted = true;
+
         const fetchProduct = async () => {
             setLoading(true);
-            const data = await getProductById(id);
-            setProduct(data);
-            if (data) {
-                setRelated(getRelatedProducts(data.id, data.category));
+            setError(false);
+            setProduct(null);
+            setRelated([]);
+            setQuantity(1);
+
+            try {
+                const data = await getProductById(id);
+
+                if (!isMounted) return;
+
+                setProduct(data);
+
+                if (data) {
+                    const relatedProducts = getRelatedProducts(
+                        data.id,
+                        data.category
+                    );
+
+                    setRelated(relatedProducts);
+                }
+            } catch (err) {
+                console.error('Unable to load product:', err);
+
+                if (isMounted) {
+                    setError(true);
+                }
+            } finally {
+                if (isMounted) {
+                    setLoading(false);
+                }
             }
-            setLoading(false);
         };
+
         fetchProduct();
+
+        return () => {
+            isMounted = false;
+        };
     }, [id]);
 
-    const handleAddToCart = () => {
-        addToCart(product, quantity);
-        addToast('Added to cart', 'success');
-    };
-
-    const renderStars = (rating) => {
-        const stars = [];
-        const fullStars = Math.floor(rating.rate);
-
-        for (let i = 0; i < fullStars; i++) {
-            stars.push(
-                <svg key={i} className="w-4 h-4 text-caramel" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                </svg>
+    const handleQuantityChange = (value) => {
+        setQuantity((current) => {
+            return Math.min(
+                MAX_QUANTITY,
+                Math.max(1, current + value)
             );
-        }
-
-        return stars;
+        });
     };
 
-    if (loading) return <Loader />;
+    const handleAddToCart = () => {
+        if (!product) return;
+
+        addToCart(product, quantity);
+        addToast(`${quantity} item(s) added to cart`, 'success');
+    };
+
+    const handleFavoriteToggle = () => {
+        if (!product) return;
+
+        if (isFavorite) {
+            removeFavorite(product.id);
+            addToast('Removed from favorites', 'success');
+        } else {
+            addFavorite(product);
+            addToast('Added to favorites', 'success');
+        }
+    };
+
+    const renderStars = (value) => {
+        const roundedRating = Math.round(value);
+
+        return (
+            <div
+                className="flex items-center gap-1"
+                aria-label={`${value} out of 5 stars`}
+            >
+                {[1, 2, 3, 4, 5].map((star) => (
+                    <span
+                        key={star}
+                        className={`text-lg ${
+                            star <= roundedRating
+                                ? 'text-[var(--text-primary)]'
+                                : 'text-[var(--border)]'
+                        }`}
+                        aria-hidden="true"
+                    >
+                        ★
+                    </span>
+                ))}
+            </div>
+        );
+    };
+
+    if (loading) {
+        return <Loader />;
+    }
+
+    if (error) {
+        return (
+            <div className="max-w-lg mx-auto py-20 text-center">
+                <div className="surface-card rounded-2xl p-10">
+                    <h2 className="heading-display text-2xl mb-3">
+                        Something went wrong
+                    </h2>
+
+                    <p className="text-secondary text-sm mb-6">
+                        We couldn't load this product. Please try again.
+                    </p>
+
+                    <Link to="/" className="btn-primary inline-flex">
+                        Back to shop
+                    </Link>
+                </div>
+            </div>
+        );
+    }
 
     if (!product) {
         return (
-            <div className="max-w-lg mx-auto text-center py-20">
-                <div className="surface-card rounded-xl p-12">
-                    <h2 className="heading-display text-2xl mb-4">Product not found</h2>
-                    <p className="text-sm text-secondary mb-8">
+            <div className="max-w-lg mx-auto py-20 text-center">
+                <div className="surface-card rounded-2xl p-10">
+                    <p className="label-caps mb-4">404 · Not found</p>
+
+                    <h2 className="heading-display text-3xl mb-3">
+                        Product not found
+                    </h2>
+
+                    <p className="text-secondary text-sm mb-8">
                         This item may have been removed or the link is incorrect.
                     </p>
-                    <Link to="/" className="btn-primary">
+
+                    <Link to="/" className="btn-primary inline-flex">
                         Back to shop
                     </Link>
                 </div>
@@ -82,106 +204,219 @@ const ProductDetail = () => {
 
     return (
         <div className="max-w-6xl mx-auto animate-fade-in">
+
+            {/* Breadcrumb */}
             <Breadcrumb
                 items={[
                     { label: 'Shop', href: '/' },
-                    { label: formatCategory(product.category), href: '/#catalog' },
+                    {
+                        label: formatCategory(product.category),
+                        href: '/#catalog',
+                    },
                     { label: product.title },
                 ]}
             />
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16">
-                <div className="surface-card rounded-xl overflow-hidden">
-                    <div className="aspect-square bg-subtle flex items-center justify-center p-10">
-                        <ProductImage
-                            src={product.image}
-                            alt={product.title}
-                            eager
-                            className="max-h-full max-w-full object-contain"
-                        />
-                    </div>
-                </div>
+            {/* Main product section */}
+            <section className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16">
 
-                <div className="flex flex-col">
-                    <p className="text-xs uppercase tracking-widest text-muted mb-3">
-                        {formatCategory(product.category)}
-                    </p>
-                    <h1 className="heading-display text-3xl md:text-4xl mb-4">{product.title}</h1>
-
-                    <div className="flex items-center gap-3 mb-6">
-                        <div className="flex items-center gap-0.5">{renderStars(product.rating)}</div>
-                        <span className="text-sm text-muted">
-                            {product.rating.rate} · {product.rating.count} reviews
-                        </span>
-                    </div>
-
-                    <p className="font-serif text-3xl text-accent mb-6">
-                        ${product.price.toFixed(2)}
-                    </p>
-
-                    <p className="text-sm text-secondary leading-relaxed mb-8">
-                        {product.description}
-                    </p>
-
-                    <div className="flex items-center gap-4 mb-8">
-                        <span className="text-sm text-muted">Quantity</span>
-                        <div className="flex items-center gap-3">
-                            <button
-                                type="button"
-                                onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                                className="w-9 h-9 rounded-full border border-[var(--border)] hover:border-[var(--accent)] flex items-center justify-center transition-colors"
-                                aria-label="Decrease quantity"
-                            >
-                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
-                                </svg>
-                            </button>
-                            <span className="w-8 text-center font-medium">{quantity}</span>
-                            <button
-                                type="button"
-                                onClick={() => setQuantity(quantity + 1)}
-                                className="w-9 h-9 rounded-full border border-[var(--border)] hover:border-[var(--accent)] flex items-center justify-center transition-colors"
-                                aria-label="Increase quantity"
-                            >
-                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                                </svg>
-                            </button>
+                {/* Product image */}
+                <div className="relative">
+                    <div className="surface-card rounded-2xl overflow-hidden">
+                        <div className="aspect-square bg-subtle flex items-center justify-center p-8 sm:p-12">
+                            <ProductImage
+                                src={product.image}
+                                alt={product.title}
+                                eager
+                                className="max-h-full max-w-full object-contain"
+                            />
                         </div>
                     </div>
 
-                    <div className="flex flex-col sm:flex-row gap-3 mt-auto">
-                        <button type="button" onClick={handleAddToCart} className="btn-primary flex-1 py-3">
-                            Add to cart
-                        </button>
+                    <span className="absolute top-4 left-4 bg-[var(--surface)] border border-[var(--border)] rounded-full px-4 py-2 text-xs uppercase tracking-wider">
+                        {formatCategory(product.category)}
+                    </span>
+                </div>
+
+                {/* Product information */}
+                <div className="flex flex-col">
+
+                    <p className="label-caps mb-4">
+                        BuyNest Collection
+                    </p>
+
+                    <h1 className="heading-display text-3xl md:text-4xl lg:text-5xl leading-tight mb-5">
+                        {product.title}
+                    </h1>
+
+                    {/* Rating */}
+                    <div className="flex flex-wrap items-center gap-3 mb-6">
+                        {renderStars(rating)}
+
+                        <span className="text-sm text-secondary">
+                            {rating.toFixed(1)} / 5
+                        </span>
+
+                        <span className="text-sm text-muted">
+                            ({reviewCount} reviews)
+                        </span>
+                    </div>
+
+                    {/* Price */}
+                    <div className="border-y border-[var(--border)] py-5 mb-6">
+                        <p className="text-xs uppercase tracking-wider text-muted mb-2">
+                            Price
+                        </p>
+
+                        <p className="text-3xl font-semibold tracking-tight">
+                            {formatPrice(price)}
+                        </p>
+                    </div>
+
+                    {/* Description */}
+                    <div className="mb-8">
+                        <h2 className="text-sm font-semibold mb-3">
+                            Product description
+                        </h2>
+
+                        <p className="text-sm text-secondary leading-7">
+                            {product.description}
+                        </p>
+                    </div>
+
+                    {/* Quantity selector */}
+                    <div className="mb-8">
+                        <p className="text-sm font-medium mb-3">
+                            Quantity
+                        </p>
+
+                        <div className="flex items-center gap-4">
+                            <div className="flex items-center border border-[var(--border)] rounded-full p-1">
+                                <button
+                                    type="button"
+                                    onClick={() => handleQuantityChange(-1)}
+                                    disabled={quantity <= 1}
+                                    className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-subtle disabled:opacity-40 disabled:cursor-not-allowed transition"
+                                    aria-label="Decrease quantity"
+                                >
+                                    −
+                                </button>
+
+                                <span
+                                    className="w-10 text-center text-sm font-medium"
+                                    aria-live="polite"
+                                >
+                                    {quantity}
+                                </span>
+
+                                <button
+                                    type="button"
+                                    onClick={() => handleQuantityChange(1)}
+                                    disabled={quantity >= MAX_QUANTITY}
+                                    className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-subtle disabled:opacity-40 disabled:cursor-not-allowed transition"
+                                    aria-label="Increase quantity"
+                                >
+                                    +
+                                </button>
+                            </div>
+
+                            <span className="text-xs text-muted">
+                                Maximum {MAX_QUANTITY} items
+                            </span>
+                        </div>
+                    </div>
+
+                    {/* Subtotal */}
+                    <div className="flex items-center justify-between border-t border-[var(--border)] pt-5 mb-6">
+                        <span className="text-sm text-secondary">
+                            Subtotal
+                        </span>
+
+                        <span className="text-lg font-semibold">
+                            {formatPrice(subtotal)}
+                        </span>
+                    </div>
+
+                    {/* Action buttons */}
+                    <div className="flex flex-col sm:flex-row gap-3">
                         <button
                             type="button"
-                            onClick={() =>
-                                isFavorite ? removeFavorite(product.id) : addFavorite(product)
-                            }
-                            className="btn-outline flex-1 py-3"
+                            onClick={handleAddToCart}
+                            className="btn-primary flex-1 py-4"
                         >
-                            {isFavorite ? 'Saved' : 'Save item'}
+                            Add to cart
+                        </button>
+
+                        <button
+                            type="button"
+                            onClick={handleFavoriteToggle}
+                            aria-pressed={isFavorite}
+                            className="btn-outline flex-1 py-4"
+                        >
+                            {isFavorite ? '♥ Saved' : '♡ Save item'}
                         </button>
                     </div>
-                </div>
-            </div>
 
+                    {/* Demo information */}
+                    <div className="mt-8 grid grid-cols-2 gap-4">
+                        <div className="bg-subtle rounded-xl p-4">
+                            <p className="text-sm font-medium mb-1">
+                                Free shipping
+                            </p>
+
+                            <p className="text-xs text-muted">
+                                Included in this demo
+                            </p>
+                        </div>
+
+                        <div className="bg-subtle rounded-xl p-4">
+                            <p className="text-sm font-medium mb-1">
+                                Secure checkout
+                            </p>
+
+                            <p className="text-xs text-muted">
+                                Demo checkout experience
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* Related products */}
             {related.length > 0 && (
                 <section className="mt-20">
-                    <p className="text-xs uppercase tracking-widest text-muted mb-2">
-                        You may also like
-                    </p>
-                    <h2 className="heading-display text-2xl mb-8">Related pieces</h2>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div className="flex items-end justify-between gap-4 mb-8">
+                        <div>
+                            <p className="label-caps mb-2">
+                                More to discover
+                            </p>
+
+                            <h2 className="heading-display text-3xl">
+                                Related pieces
+                            </h2>
+                        </div>
+
+                        <Link
+                            to="/"
+                            className="text-sm underline underline-offset-4 hover:opacity-60 transition"
+                        >
+                            View all products
+                        </Link>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
                         {related.map((item) => (
-                            <ProductCard key={item.id} product={item} />
+                            <ProductCard
+                                key={item.id}
+                                product={item}
+                            />
                         ))}
                     </div>
                 </section>
             )}
 
-            <div className="mt-16">
+            {/* Contact CTA */}
+            <div className="mt-20">
                 <ContactCTA />
             </div>
         </div>

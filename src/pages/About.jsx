@@ -1,4 +1,6 @@
+
 import { Link } from 'react-router-dom';
+
 import { brand } from '../config/brand';
 import ContactCTA from '../components/ContactCTA';
 import { usePageMeta } from '../hooks/usePageMeta';
@@ -7,33 +9,149 @@ const About = () => {
     const { about, author } = brand;
 
     usePageMeta({
-        title: 'About',
-        description: `Learn about ${brand.name} — a curated storefront demo built by ${author.name}.`,
+        title: 'About BuyNest',
+        description: about.intro,
     });
 
     return (
-        <div className="max-w-3xl mx-auto animate-fade-in">
-            <p className="label-caps mb-4">
-                About {brand.name}
-            </p>
-            <h1 className="heading-display text-4xl md:text-5xl mb-6">{about.title}</h1>
-            <p className="text-base md:text-lg text-secondary leading-relaxed mb-8">
-                {about.intro}
-            </p>
+        <div className="max-w-5xl mx-auto animate-fade-in">
 
-            <div className="space-y-6 text-sm text-secondary leading-relaxed mb-16">
-                {about.story.map((paragraph) => (
-                    <p key={paragraph.slice(0, 32)}>{paragraph}</p>
-                ))}
-            </div>
+            {/* Hero section */}
+            <section className="mb-20">
+                <p className="label-caps mb-4">
+                    Discover BuyNest
+                </p>
 
-            <section className="mb-16">
-                <h2 className="heading-display text-2xl mb-8">What we stand for</h2>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    {about.values.map((value) => (
-                        <div key={value.title} className="surface-card rounded-xl p-6">
-                            <h3 className="text-sm font-medium mb-2">{value.title}</h3>
-                            <p className="text-xs text-secondary leading-relaxed">
+                <h1 className="heading-display text-4xl md:text-6xl leading-tight max-w-3xl mb-7">
+                    {about.title}
+                </h1>
+
+                <p className="text-base md:text-lg text-secondary leading-relaxed max-w-2xl">
+                    {about.intro}
+                </p>
+            </section>
+
+            {/* Brand story */}
+            <section className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16 mb-20">
+                <div>
+                    <p className="label-caps mb-3">
+                        Our story
+                    </p>
+
+                    <h2 className="heading-display text-2xl md:text-3xl">
+                        Everything you need, in one place.
+                    </h2>
+                </div>
+
+                <div className="space-y-5 text-sm text-secondary leading-7">
+                    {about.story.map((paragraph) => (
+                        <p key={paragraph}>
+                            {paragraph}
+                        </p>
+                    ))}
+                </div>
+            </section>
+
+            {/* Shopping categories */}
+            <section className="mb-20">
+                <div className="mb-8">
+                    <p className="label-caps mb-3">
+                        Explore our collection
+                    </p>
+
+                    <h2 className="heading-display text-2xl md:text-3xl">
+                        Something for every day.
+                    </h2>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+
+                    <Link
+                        to="/"
+                        className="surface-card rounded-2xl p-7 min-h-44 flex flex-col justify-between group hover:border-[var(--text-primary)] transition-colors"
+                    >
+                        <span className="text-3xl" aria-hidden="true">
+                            ◇
+                        </span>
+
+                        <div>
+                            <h3 className="font-medium mb-1">
+                                Fashion
+                            </h3>
+
+                            <p className="text-xs text-muted">
+                                Everyday style and essentials.
+                            </p>
+                        </div>
+                    </Link>
+
+                    <Link
+                        to="/"
+                        className="surface-card rounded-2xl p-7 min-h-44 flex flex-col justify-between group hover:border-[var(--text-primary)] transition-colors"
+                    >
+                        <span className="text-3xl" aria-hidden="true">
+                            ▣
+                        </span>
+
+                        <div>
+                            <h3 className="font-medium mb-1">
+                                Electronics
+                            </h3>
+
+                            <p className="text-xs text-muted">
+                                Technology for everyday life.
+                            </p>
+                        </div>
+                    </Link>
+
+                    <Link
+                        to="/"
+                        className="surface-card rounded-2xl p-7 min-h-44 flex flex-col justify-between group hover:border-[var(--text-primary)] transition-colors"
+                    >
+                        <span className="text-3xl" aria-hidden="true">
+                            ✳
+                        </span>
+
+                        <div>
+                            <h3 className="font-medium mb-1">
+                                Lifestyle
+                            </h3>
+
+                            <p className="text-xs text-muted">
+                                Little things that make a difference.
+                            </p>
+                        </div>
+                    </Link>
+                </div>
+            </section>
+
+            {/* Brand values */}
+            <section className="mb-20">
+                <div className="mb-8">
+                    <p className="label-caps mb-3">
+                        The BuyNest experience
+                    </p>
+
+                    <h2 className="heading-display text-2xl md:text-3xl">
+                        What makes us different.
+                    </h2>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+                    {about.values.map((value, index) => (
+                        <div
+                            key={value.title}
+                            className="surface-card rounded-2xl p-7"
+                        >
+                            <span className="text-xs text-muted mb-6 block">
+                                0{index + 1}
+                            </span>
+
+                            <h3 className="text-base font-medium mb-3">
+                                {value.title}
+                            </h3>
+
+                            <p className="text-sm text-secondary leading-relaxed">
                                 {value.text}
                             </p>
                         </div>
@@ -41,34 +159,50 @@ const About = () => {
                 </div>
             </section>
 
-            <section className="surface-card rounded-xl p-8 mb-16">
-                <p className="text-xs uppercase tracking-widest text-muted mb-3">
-                    Behind the build
+            {/* Developer section */}
+            <section className="surface-card rounded-2xl p-7 sm:p-10 mb-20">
+                <p className="label-caps mb-4">
+                    Behind the project
                 </p>
-                <h2 className="heading-display text-xl mb-3">{author.name}</h2>
-                <p className="text-sm text-secondary leading-relaxed mb-6">
-                    {author.role} crafting front-end experiences with attention to layout, performance,
-                    and detail. This demo is part of a portfolio of interactive storefront concepts —
-                    available to adapt for your products, brand, and customers.
+
+                <h2 className="heading-display text-2xl md:text-3xl mb-4">
+                    Built with attention to detail.
+                </h2>
+
+                <p className="text-sm text-secondary leading-relaxed max-w-2xl mb-7">
+                    BuyNest is an interactive e-commerce frontend demonstration
+                    customized and developed by {author.name}, a {author.role}.
+                    It showcases product discovery, responsive interfaces,
+                    wishlist management, shopping cart functionality, and
+                    a multi-step demo checkout experience.
                 </p>
+
                 <div className="flex flex-wrap gap-3">
-                    <a href={brand.cta.primary.href} className="btn-primary">
-                        {brand.cta.primary.label}
-                    </a>
                     <a
-                        href={brand.cta.secondary.href}
+                        href={author.github}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="btn-outline"
                     >
-                        {brand.cta.secondary.label}
+                        View GitHub ↗
                     </a>
-                    <Link to="/" className="btn-outline">
-                        View shop
+
+                    <a
+                        href={author.linkedin}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="btn-outline"
+                    >
+                        LinkedIn ↗
+                    </a>
+
+                    <Link to="/" className="btn-primary">
+                        Explore BuyNest →
                     </Link>
                 </div>
             </section>
 
+            {/* Contact */}
             <ContactCTA />
         </div>
     );

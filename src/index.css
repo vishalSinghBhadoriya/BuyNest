@@ -1,60 +1,94 @@
+
 @import 'tailwindcss';
 
-@theme {
-  --color-cream: #faf7f2;
-  --color-cream-dark: #ede4d6;
-  --color-coffee: #5c3a1e;
-  --color-coffee-light: #7a5230;
-  --color-coffee-dark: #442a14;
-  --color-latte: #d4b896;
-  --color-espresso: #161210;
-  --color-espresso-light: #2a221c;
-  --color-caramel: #8b6914;
-  --color-stone-muted: #5c4f40;
+/* =========================================
+   THEME CONFIGURATION
+========================================= */
 
+@theme {
+  /* Monochrome color palette */
+  --color-cream: #f5f5f5;
+  --color-cream-dark: #e5e5e5;
+
+  --color-coffee: #171717;
+  --color-coffee-light: #404040;
+  --color-coffee-dark: #090909;
+
+  --color-latte: #a3a3a3;
+  --color-espresso: #111111;
+  --color-espresso-light: #262626;
+
+  --color-caramel: #a3a3a3;
+  --color-stone-muted: #737373;
+
+  /* Typography */
   --font-serif: 'Playfair Display', Georgia, serif;
   --font-sans: 'DM Sans', system-ui, sans-serif;
 }
 
-/* ── Light mode (default) ── */
+/* =========================================
+   LIGHT MODE
+========================================= */
+
 :root {
-  --bg-page: #faf7f2;
-  --bg-subtle: #ede4d6;
+  --bg-page: #f5f5f5;
+  --bg-subtle: #ebebeb;
   --bg-elevated: #ffffff;
+
   --surface: #ffffff;
-  --surface-muted: #f3ebe0;
-  --border: #cfc0aa;
-  --text-primary: #1a1410;
-  --text-secondary: #3d3328;
-  --text-muted: #5c4f40;
-  --accent: #5c3a1e;
-  --accent-hover: #442a14;
-  --on-accent: #faf7f2;
-  --banner-bg: #5c3a1e;
-  --banner-text: #faf7f2;
-  --focus-ring: rgba(92, 58, 30, 0.35);
-  --shadow-card: 0 1px 4px rgba(26, 20, 16, 0.08);
+  --surface-muted: #eeeeee;
+
+  --border: #dedede;
+
+  --text-primary: #171717;
+  --text-secondary: #525252;
+  --text-muted: #737373;
+
+  --accent: #171717;
+  --accent-hover: #404040;
+  --on-accent: #ffffff;
+
+  --banner-bg: #171717;
+  --banner-text: #ffffff;
+
+  --focus-ring: rgba(0, 0, 0, 0.25);
+
+  --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
-/* ── Dark mode ── */
+/* =========================================
+   DARK MODE
+========================================= */
+
 .dark {
-  --bg-page: #161210;
-  --bg-subtle: #1f1914;
-  --bg-elevated: #2a221c;
-  --surface: #2a221c;
-  --surface-muted: #332920;
-  --border: #4d4034;
-  --text-primary: #faf7f2;
-  --text-secondary: #e2d4bc;
-  --text-muted: #b8a68a;
-  --accent: #d4b896;
-  --accent-hover: #e8d5bc;
-  --on-accent: #1a1410;
-  --banner-bg: #2a221c;
-  --banner-text: #faf7f2;
-  --focus-ring: rgba(212, 184, 150, 0.4);
-  --shadow-card: 0 1px 4px rgba(0, 0, 0, 0.35);
+  --bg-page: #111111;
+  --bg-subtle: #1a1a1a;
+  --bg-elevated: #222222;
+
+  --surface: #1c1c1c;
+  --surface-muted: #262626;
+
+  --border: #333333;
+
+  --text-primary: #f5f5f5;
+  --text-secondary: #d4d4d4;
+  --text-muted: #a3a3a3;
+
+  --accent: #f5f5f5;
+  --accent-hover: #d4d4d4;
+  --on-accent: #111111;
+
+  --banner-bg: #1c1c1c;
+  --banner-text: #ffffff;
+
+  --focus-ring: rgba(255, 255, 255, 0.35);
+
+  --shadow-card: 0 2px 10px rgba(0, 0, 0, 0.25);
 }
+
+/* =========================================
+   GLOBAL STYLES
+========================================= */
 
 html {
   scroll-behavior: smooth;
@@ -66,15 +100,23 @@ body {
   font-family: var(--font-sans);
   background-color: var(--bg-page);
   color: var(--text-primary);
+
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
 }
 
 .font-serif {
   font-family: var(--font-serif);
 }
 
-/* ── Semantic utilities ── */
+/* =========================================
+   SEMANTIC UTILITIES
+========================================= */
+
 .text-muted {
   color: var(--text-muted);
 }
@@ -99,6 +141,10 @@ body {
   background-color: var(--bg-elevated);
 }
 
+/* =========================================
+   TYPOGRAPHY
+========================================= */
+
 .label-caps {
   font-size: 0.75rem;
   font-weight: 500;
@@ -107,29 +153,60 @@ body {
   color: var(--text-muted);
 }
 
+.heading-display {
+  font-family: var(--font-serif);
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  color: var(--text-primary);
+}
+
+/* =========================================
+   CARDS
+========================================= */
+
 .surface-card {
   background: var(--surface);
   border: 1px solid var(--border);
   box-shadow: var(--shadow-card);
   color: var(--text-primary);
+
+  transition:
+    background-color 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
 }
+
+/* =========================================
+   BUTTONS
+========================================= */
 
 .btn-primary {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
+
   padding: 0.625rem 1.25rem;
+
   border-radius: 0.5rem;
+
   font-weight: 500;
   font-size: 0.875rem;
+
   background-color: var(--accent);
   color: var(--on-accent);
-  transition: background-color 0.2s ease;
+
+  transition:
+    background-color 0.2s ease,
+    transform 0.2s ease;
 }
 
 .btn-primary:hover {
   background-color: var(--accent-hover);
+}
+
+.btn-primary:active {
+  transform: scale(0.97);
 }
 
 .btn-outline {
@@ -137,20 +214,31 @@ body {
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
+
   padding: 0.625rem 1.25rem;
+
   border-radius: 0.5rem;
+
   font-weight: 500;
   font-size: 0.875rem;
+
   border: 1px solid var(--border);
   color: var(--text-primary);
   background: var(--surface);
-  transition: border-color 0.2s ease, background-color 0.2s ease;
+
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease;
 }
 
 .btn-outline:hover {
   border-color: var(--accent);
   background: var(--surface-muted);
 }
+
+/* =========================================
+   CATEGORY PILLS
+========================================= */
 
 .pill-active {
   background-color: var(--accent);
@@ -168,25 +256,31 @@ body {
   color: var(--accent);
 }
 
-.heading-display {
-  font-family: var(--font-serif);
-  letter-spacing: -0.02em;
-  line-height: 1.15;
-  color: var(--text-primary);
-}
+/* =========================================
+   FORM INPUTS
+========================================= */
 
 .input-field {
   width: 100%;
   padding: 0.5rem 0.75rem;
+
   border: 1px solid var(--border);
   border-radius: 0.5rem;
+
   background: var(--surface);
   color: var(--text-primary);
+
   font-size: 0.875rem;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .input-field:focus {
   outline: none;
+  border-color: var(--accent);
+
   box-shadow: 0 0 0 2px var(--focus-ring);
 }
 
@@ -194,8 +288,13 @@ body {
   color: var(--text-muted);
 }
 
+/* =========================================
+   SCROLLBAR
+========================================= */
+
 ::-webkit-scrollbar {
   width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-track {
@@ -203,39 +302,61 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--accent);
-  border-radius: 3px;
+  background: var(--text-muted);
+  border-radius: 10px;
 }
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
+}
+
+/* =========================================
+   ACCESSIBILITY
+========================================= */
 
 .skip-link {
   position: absolute;
+
   width: 1px;
   height: 1px;
+
   padding: 0;
   margin: -1px;
+
   overflow: hidden;
   clip: rect(0, 0, 0, 0);
+
   white-space: nowrap;
   border: 0;
 }
 
 .skip-link:focus {
   position: fixed;
+
   top: 1rem;
   left: 1rem;
+
   z-index: 200;
+
   width: auto;
   height: auto;
+
   margin: 0;
   padding: 0.625rem 1rem;
+
   overflow: visible;
   clip: auto;
+
   white-space: normal;
+
   border-radius: 0.5rem;
+
   background-color: var(--accent);
   color: var(--on-accent);
+
   font-size: 0.875rem;
   font-weight: 500;
+
   text-decoration: none;
 }
 
@@ -248,6 +369,10 @@ button:focus:not(:focus-visible),
 a:focus:not(:focus-visible) {
   outline: none;
 }
+
+/* =========================================
+   REDUCED MOTION
+========================================= */
 
 @media (prefers-reduced-motion: reduce) {
   html {
