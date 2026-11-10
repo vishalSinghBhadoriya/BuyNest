@@ -1,112 +1,207 @@
-# devamir — Storefront Demo
+# BuyNest — Modern E-commerce Storefront
 
-A minimal, responsive e-commerce storefront built with React and Vite. Designed as a live portfolio demo by **Amir Fallahi** — browse products, save favourites, manage a cart, and walk through a three-step checkout flow.
+A modern, responsive e-commerce storefront built with **React 19, Vite 7, and Tailwind CSS 4**.
 
-**Live demo:** [devamir99.github.io/productService-app](https://devamir99.github.io/productService-app)
+BuyNest provides a complete frontend shopping experience, including product discovery, search and filters, favourites, shopping cart, checkout, and order history. It is a portfolio project demonstrating modern React development practices and responsive UI design.
+
+**Live Demo:** [https://vishalsinghbhadoriya.github.io/BuyNest/](https://vishalsinghbhadoriya.github.io/BuyNest/)
+
+**GitHub Repository:** [https://github.com/vishalSinghBhadoriya/BuyNest](https://github.com/vishalSinghBhadoriya/BuyNest)
+
+---
 
 ## Screenshots
 
-### Home — dark & light
+### Home Page
 
-<p align="center">
-  <img src="docs/screenshots/home-dark.png" alt="devamir home page in dark mode" width="720" />
-</p>
+Add your project screenshots here.
 
-<p align="center">
-  <em>Home page · dark theme</em>
-</p>
+<!-- Add screenshots in docs/screenshots/ -->
 
-<p align="center">
-  <img src="docs/screenshots/home-light.png" alt="devamir home page in light mode" width="720" />
-</p>
+### Product Details
 
-<p align="center">
-  <em>Home page · light theme</em>
-</p>
+<!-- Add product detail screenshots here. -->
 
-### Product detail — dark & light
+### Shopping Cart and Checkout
 
-<p align="center">
-  <img src="docs/screenshots/product-dark.png" alt="devamir product detail page in dark mode" width="720" />
-</p>
+<!-- Add cart and checkout screenshots here. -->
 
-<p align="center">
-  <em>Product detail · dark theme</em>
-</p>
+### Orders and Favourites
 
-<p align="center">
-  <img src="docs/screenshots/product-light.png" alt="devamir product detail page in light mode" width="720" />
-</p>
+<!-- Add orders and favourites screenshots here. -->
 
-<p align="center">
-  <em>Product detail · light theme</em>
-</p>
+---
 
 ## Features
 
-- Product catalogue with search, category, price, and rating filters
-- Product detail pages with related items
-- Shopping cart with persistent local storage
-- Favourites / wishlist
-- Three-step checkout (front-end demo — no real payments)
-- Dark and light themes
-- Cream-and-coffee visual identity
-- Mobile-first responsive layout
+- **Product Catalogue:** Browse products across different categories.
+- **Search and Filtering:** Search products and filter by category, price, and rating.
+- **Product Details:** View product information, ratings, descriptions, and related products.
+- **Shopping Cart:** Add, remove, and update product quantities.
+- **Favourites:** Save and manage favourite products.
+- **Checkout Flow:** Three-step checkout experience with shipping details, order review, and demo payment.
+- **Order History:** View completed demo orders, purchased products, and order summaries.
+- **Persistent Storage:** Cart, favourites, and order history are saved using browser localStorage.
+- **Dark and Light Themes:** Switch between two visual themes.
+- **Responsive Design:** Optimized for mobile, tablet, and desktop screens.
 
-## Tech stack
+> **Note:** BuyNest is a frontend demonstration. It does not process real payments or submit orders to a backend server. Shopping and order information is stored locally in the browser.
 
-- React 19 · Vite 7 · Tailwind CSS 4
-- React Router 7
-- Local JSON product data (no external API dependency)
+---
 
-## Getting started
+## Tech Stack
+
+| Technology | Purpose |
+|---|---|
+| React 19 | Component-based UI development |
+| Vite 7 | Development server and build tool |
+| Tailwind CSS 4 | Styling and responsive layouts |
+| React Router 7 | Client-side routing |
+| JavaScript | Application logic |
+| Context API | Shared application state |
+| Axios | HTTP client dependency |
+| Framer Motion | UI animations |
+| localStorage | Browser-side data persistence |
+| ESLint | Code quality and linting |
+
+**Product data:** Local JSON dataset. The storefront does not depend on an external product API.
+
+---
+
+## Project Structure
+
+```text
+BuyNest/
+├── public/
+├── src/
+│   ├── api/
+│   ├── components/
+│   ├── config/
+│   ├── context/
+│   ├── data/
+│   ├── hooks/
+│   ├── pages/
+│   ├── App.jsx
+│   ├── App.css
+│   ├── index.css
+│   └── main.jsx
+├── .github/
+│   └── workflows/
+│       └── deploy-pages.yml
+├── index.html
+├── package.json
+├── vite.config.js
+└── README.md
+```
+
+---
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js 22 or later
+- npm
+- Git
+
+### Installation
+
+Clone the repository:
 
 ```bash
-git clone https://github.com/devamir99/productService-app.git
-cd productService-app
+git clone https://github.com/vishalSinghBhadoriya/BuyNest.git
+```
+
+Navigate to the project directory:
+
+```bash
+cd BuyNest
+```
+
+Install dependencies:
+
+```bash
 npm install
+```
+
+Start the development server:
+
+```bash
 npm run dev
 ```
 
-Open [http://localhost:5173](http://localhost:5173).
+Open the local development URL displayed in your terminal, usually:
 
-### Environment variables
+```text
+http://localhost:5173/
+```
 
-Copy `env.example` to `.env` and optionally set:
+---
 
-| Variable | Purpose |
-|----------|---------|
-| `VITE_SITE_URL` | Production URL for Open Graph meta tags |
+## Environment Variables
 
-## Scripts
+Create a `.env` file in the project root if you want to configure the production site URL:
+
+```env
+VITE_SITE_URL=https://vishalsinghbhadoriya.github.io/BuyNest/
+```
+
+See `.env.example` for the available environment variable.
+
+---
+
+## Available Scripts
 
 | Command | Description |
-|---------|-------------|
-| `npm run dev` | Start development server |
-| `npm run build` | Production build |
-| `npm run preview` | Preview production build locally |
+|---|---|
+| `npm run dev` | Start the development server |
+| `npm run build` | Create a production build |
+| `npm run preview` | Preview the production build |
 | `npm run lint` | Run ESLint |
 
-## Deploy to GitHub Pages
+---
 
-This project is configured for GitHub Pages via GitHub Actions (`.github/workflows/deploy-pages.yml`).
+## Deployment
 
-1. Push to the `main` branch (or run the workflow manually)
-2. In the repo: **Settings → Pages → Source → GitHub Actions**
-3. After the workflow succeeds, open:  
-   [https://devamir99.github.io/productService-app](https://devamir99.github.io/productService-app)
+BuyNest is deployed using **GitHub Pages and GitHub Actions**.
 
-Vite `base` is set to `/productService-app/` for project-site hosting. The build also copies `index.html` → `404.html` so SPA routes work on refresh.
+### Deployment Configuration
 
-## Custom builds
+1. Push your changes to the `main` branch.
+2. GitHub Actions automatically installs dependencies and builds the application.
+3. The generated `dist` directory is uploaded to GitHub Pages.
+4. GitHub Pages publishes the application.
 
-This repository is a **demonstration storefront**. For a production-ready shop tailored to your brand, catalogue, and backend:
+Make sure the repository is configured under:
 
-- **Phone:** [+98 920 500 7494](tel:+989205007494)
-- **LinkedIn:** [linkedin.com/in/devamir](https://www.linkedin.com/in/devamir)
-- **Email:** devamir99@gmail.com
-- **GitHub:** [github.com/devamir99](https://github.com/devamir99)
+**Settings → Pages → Build and deployment → Source → GitHub Actions**
+
+### Production URL
+
+[https://vishalsinghbhadoriya.github.io/BuyNest/](https://vishalsinghbhadoriya.github.io/BuyNest/)
+
+The Vite base path is configured to use `/BuyNest/` during GitHub Actions builds and `/` during local development.
+
+---
+
+## Author
+
+**Vishal Bhadoriya**
+
+Frontend Developer
+
+- **GitHub:** [vishalSinghBhadoriya](https://github.com/vishalSinghBhadoriya/)
+- **LinkedIn:** [Vishal Bhadoriya](https://www.linkedin.com/in/vishal-singh-bhadoriya)
+- **Email:** vishalbhadoriya9765@gmail.com
+
+---
+
+## Acknowledgements
+
+BuyNest was developed by customizing and extending an existing MIT-licensed storefront project. Original license and copyright notices are retained in the repository.
+
+---
 
 ## License
 
-MIT — see [LICENSE](LICENSE).
+This project is distributed under the MIT License. See the [LICENSE](LICENSE) file for details.
